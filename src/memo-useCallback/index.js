@@ -6,10 +6,14 @@ const url = "https://course-api.com/javascript-store-products";
 // every time props or state changes, component re-renders
 
 const calculateMostExpensive = (data) => {
+  console.log("Hello");
   return (
     data.reduce((total, item) => {
       const price = item.fields.price;
-      return total + price;
+      if (price >= total) {
+        total = price;
+      }
+      return total;
     }, 0) / 100
   );
 };
@@ -23,6 +27,11 @@ const Index = () => {
     setCart(cart + 1);
   }, [cart]);
 
+  const mostExpensive = useMemo(
+    () => calculateMostExpensive(products),
+    [products]
+  );
+
   return (
     <>
       <h1>Count : {count}</h1>
@@ -31,7 +40,7 @@ const Index = () => {
       </button>
 
       <h1 style={{ marginTop: "3rem" }}>Cart :{cart}</h1>
-
+      <h1>Most Expensive : ${mostExpensive}</h1>
       <BigList products={products} addToCart={addToCart} />
     </>
   );
